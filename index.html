@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính Điểm Xét Tốt Nghiệp THPT 2026 - Trường THCS & THPT Long Thạnh</title>
+    <style>
+        :root {
+            --primary-color: #1e3a8a;
+            --primary-hover: #1e40af;
+            --secondary-color: #b91c1c;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-color: #334155;
+            --border-color: #cbd5e1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent; /* Tối ưu trải nghiệm chạm trên iOS/Android */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 12px; /* Giảm padding viền ngoài trên mobile */
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 24px 16px; /* Tối ưu không gian ruột trên mobile */
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .header-info {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px dashed var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .school-name {
+            font-size: 16px; /* Giảm nhẹ size trên mobile để tránh tràn hàng ép buộc */
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--primary-color);
+            letter-spacing: 0.5px;
+            line-height: 1.4;
+        }
+
+        .dept-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748b;
+            margin-top: 6px;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--secondary-color);
+            margin-top: 12px;
+            font-size: 18px; /* Thu gọn tiêu đề trên mobile */
+            text-transform: uppercase;
+            line-height: 1.3;
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #475569;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 8px;
+        }
+
+        /* Mặc định hiển thị 1 cột trên điện thoại */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 4px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Tối ưu hóa ô nhập liệu dễ chạm bằng ngón tay hơn */
+        input[type="number"], select {
+            width: 100%;
+            padding: 12px; /* Tăng chiều cao vùng bấm */
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px; /* Tối thiểu 16px để iOS Safari không tự động zoom màn hình khi focus */
+            transition: all 0.2s;
+            outline: none;
+            background-color: #fff;
+            -moz-appearance: textfield;
+        }
+
+        /* Ẩn nút tăng giảm mặc định của input number để giao diện mobile thanh thoát hơn */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"]:focus, select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+
+        .success {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+        }
+
+        .warning {
+            background-color: #fff7ed;
+            border: 1px solid #fed7aa;
+            color: #9a3412;
+        }
+
+        .result-title {
+            font-size: 15px;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .result-score {
+            font-size: 34px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+        
+        .status-text {
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        /* CSS Responsive: Khi màn hình lớn hơn 480px (máy tính bảng, PC) sẽ mở rộng thành 2 cột */
+        @media (min-width: 480px) {
+            body {
+                padding: 20px;
+            }
+            .container {
+                padding: 35px;
+            }
+            .school-name {
+                font-size: 18px;
+            }
+            h2 {
+                font-size: 22px;
+            }
+            .grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+            .school-name br {
+                display: block; /* Giữ nguyên xuống hàng trên PC */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-info">
+        <div class="school-name">TRƯỜNG THCS VÀ THPT<br>LONG THẠNH</div>
+        <div class="dept-name">Ban hồ sơ tốt nghiệp THPT</div>
+        <h2>Hệ Thống Tính Điểm Xét Tốt Nghiệp 2026</h2>
+    </div>
+    
+    <div>
+        <div class="form-section">
+            <div class="section-title">Điểm Các Môn Dự Thi (Hệ số 1)</div>
+            <div class="grid">
+                <div class="form-group">
+                    <label for="van">Môn Văn:</label>
+                    <!-- Đổi thành inputmode="decimal" để tự động bật bàn phím số có dấu chấm trên điện thoại -->
+                    <input type="number" id="van" min="0" max="10" step="0.01" inputmode="decimal" placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label for="toan">Môn Toán:</label>
+                    <input type="number" id="toan" min="0" max="10" step="0.01" inputmode="decimal" placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label for="tc1">Môn tự chọn 1:</label>
+                    <input type="number" id="tc1" min="0" max="10" step="0.01" inputmode="decimal" placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label for="tc2">Môn tự chọn 2:</label>
+                    <input type="number" id="tc2" min="0" max="10" step="0.01" inputmode="decimal" placeholder="0.00">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="section-title">Học bạ & Điểm Ưu tiên, Khuyến khích</div>
+            <div class="form-group">
+                <label for="dtbNamHoc">Điểm TB các năm học (ĐTB Học bạ):</label>
+                <input type="number" id="dtbNamHoc" min="0" max="10" step="0.01" inputmode="decimal" placeholder="0.00">
+            </div>
+            <div class="grid">
+                <div class="form-group">
+                    <label for="khuyenKhich">Điểm khuyến khích:</label>
+                    <select id="khuyenKhich">
+                        <option value="0">+0 (Không có)</option>
+                        <option value="1">+1.0 điểm</option>
+                        <option value="1.5">+1.5 điểm</option>
+                        <option value="2">+2.0 điểm</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="uuTien">Điểm ưu tiên:</label>
+                    <select id="uuTien">
+                        <option value="0">+0 (Không có)</option>
+                        <option value="0.25">+0.25 điểm</option>
+                        <option value="0.5">+0.5 điểm</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <button type="button" onclick="tinhDiem2026()">Tính Kết Quả</button>
+    </div>
+
+    <div class="result-box" id="resultBox">
+        <div class="result-title">Điểm xét tốt nghiệp (ĐXTN) năm 2026:</div>
+        <div class="result-score" id="scoreResult">0.00</div>
+        <div class="status-text" id="statusText"></div>
+    </div>
+</div>
+
+<script>
+function tinhDiem2026() {
+    const van = parseFloat(document.getElementById('van').value);
+    const toan = parseFloat(document.getElementById('toan').value);
+    const tc1 = parseFloat(document.getElementById('tc1').value);
+    const tc2 = parseFloat(document.getElementById('tc2').value);
+    const dtbNamHoc = parseFloat(document.getElementById('dtbNamHoc').value);
+    
+    const khuyenKhich = parseFloat(document.getElementById('khuyenKhich').value);
+    const uuTien = parseFloat(document.getElementById('uuTien').value);
+
+    if (isNaN(van) || isNaN(toan) || isNaN(tc1) || isNaN(tc2) || isNaN(dtbNamHoc)) {
+        alert("Hệ thống yêu cầu nhập đầy đủ điểm của 4 môn thi và Điểm TB các năm học!");
+        return;
+    }
+
+    if (van < 0 || van > 10 || toan < 0 || toan > 10 || tc1 < 0 || tc1 > 10 || tc2 < 0 || tc2 > 10 || dtbNamHoc < 0 || dtbNamHoc > 10) {
+        alert("Điểm số nhập vào không hợp lệ! Vui lòng chỉ nhập từ 0 đến 10.");
+        return;
+    }
+
+    const coDiemLiet = (van <= 1 || toan <= 1 || tc1 <= 1 || tc2 <= 1);
+
+    const tongDiemThi = van + toan + tc1 + tc2;
+    const tongSoMon = 4;
+
+    const veTraiTrongNgoac = (tongDiemThi / tongSoMon) + (khuyenKhich / 4);
+    const cumChinh = (veTraiTrongNgoac + dtbNamHoc) / 2;
+    const dxtn = cumChinh + uuTien;
+
+    const resultBox = document.getElementById('resultBox');
+    const scoreResult = document.getElementById('scoreResult');
+    const statusText = document.getElementById('statusText');
+    
+    scoreResult.innerText = dxtn.toFixed(2);
+    resultBox.style.display = 'block';
+
+    if (coDiemLiet) {
+        resultBox.className = "result-box warning";
+        statusText.innerText = "KẾT QUẢ: KHÔNG ĐỦ ĐIỀU KIỆN (Bị điểm liệt ≤ 1.0 điểm)!";
+    } else if (dxtn >= 5.0) {
+        resultBox.className = "result-box success";
+        statusText.innerText = "CHÚC MỪNG: ĐỦ ĐIỀU KIỆN CÔNG NHẬN TỐT NGHIỆP THPT!";
+    } else {
+        resultBox.className = "result-box warning";
+        statusText.innerText = "KẾT QUẢ: KHÔNG ĐỦ ĐIỀU KIỆN ĐỖ TỐT NGHIỆP (< 5.0 điểm).";
+    }
+    
+    resultBox.scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
